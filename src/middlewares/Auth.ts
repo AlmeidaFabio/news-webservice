@@ -6,12 +6,14 @@ export class Auth {
         try {
             const token = request.headers.authorization || '';
             const SECRET = process.env.SECRET_KEY || '';
+
             if (token === '') {
                 throw new Error('Token not found');
             }
             if (SECRET === '') {
                 throw new Error('Secret key not found');
             }
+
             await new Promise<void>((resolve, reject) => {
                 jwt.verify(token, SECRET, (err) => {
                     if (err) {
@@ -21,6 +23,7 @@ export class Auth {
                     }
                 });
             });
+            
             next();
         } catch (error) {
             return response.status(401).json({error: error});
